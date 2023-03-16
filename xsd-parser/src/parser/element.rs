@@ -157,6 +157,8 @@ pub fn element_modifier(node: &Node) -> TypeModifier {
             MaxOccurs::Bounded(val) => {
                 if val > 1 {
                     TypeModifier::Array
+                } else if val == 1 {
+                    TypeModifier::Option
                 } else {
                     TypeModifier::None
                 }
