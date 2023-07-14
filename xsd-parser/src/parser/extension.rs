@@ -40,6 +40,7 @@ fn simple_content_extension(node: &Node) -> RsEntity {
 
     RsEntity::Struct(Struct {
         name: String::default(),
+        basetypes: RefCell::new(vec![]),
         subtypes: vec![],
         comment: get_documentation(node),
         fields: RefCell::new(fields),

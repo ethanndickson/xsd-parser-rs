@@ -6,13 +6,13 @@ use std::borrow::Cow;
 pub trait StructGenerator {
     fn generate(&self, entity: &Struct, gen: &Generator) -> String {
         format!(
-            "{comment}{macros}pub struct {name} {{{fields}}}\n\n{validation}\n{subtypes}\n",
+            "{comment}{macros}pub struct {name} {{{fields}}}\n\n{traits}\n{subtypes}\n",
             comment = self.format_comment(entity, gen),
             macros = self.macros(entity, gen),
             name = self.get_type_name(entity, gen),
             fields = self.fields(entity, gen),
             subtypes = self.subtypes(entity, gen),
-            validation = self.validation(entity, gen),
+            traits = self.traits(entity, gen),
         )
     }
 
@@ -114,12 +114,22 @@ pub trait StructGenerator {
         gen.base().mod_name(entity.name.as_str())
     }
 
-    fn validation(&self, entity: &Struct, gen: &Generator) -> Cow<'static, str> {
+    fn traits(&self, entity: &Struct, gen: &Generator) -> Cow<'static, str> {
+        let mut traits = String::new();
+        entity.basetypes.borrow().iter().for_each(|t| {
+            traits.push_str(&format!(
+                r#"impl SE{t} for {} {{}}
+"#,
+                entity.name
+            ));
+        });
+
         // Empty validation
-        Cow::Owned(gen_validate_impl(
+        traits.push_str(&gen_validate_impl(
             self.get_type_name(entity, gen).as_str(),
             "",
-        ))
+        ));
+        Cow::Owned(traits)
     }
 }
 

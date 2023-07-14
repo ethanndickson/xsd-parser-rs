@@ -51,6 +51,7 @@ pub fn parse_complex_type(node: &Node, parent: &Node) -> RsEntity {
             comment: get_documentation(node),
             subtypes: vec![],
             name: name.to_string(),
+            basetypes: RefCell::new(vec![]),
         });
     }
     let content_node = content.unwrap();
@@ -72,6 +73,7 @@ pub fn parse_complex_type(node: &Node, parent: &Node) -> RsEntity {
             en.subtypes = vec![RsEntity::Struct(Struct {
                 name: name.to_string(),
                 subtypes: vec![],
+                basetypes: RefCell::new(vec![]),
                 comment: get_documentation(node),
                 fields: RefCell::new(fields),
                 attribute_groups: RefCell::new(attribute_groups_to_aliases(node)),

@@ -22,6 +22,7 @@ pub struct Struct {
     pub fields: RefCell<Vec<StructField>>,
     pub attribute_groups: RefCell<Vec<Alias>>,
     pub subtypes: Vec<RsEntity>,
+    pub basetypes: RefCell<Vec<String>>,
 }
 
 impl Struct {
@@ -60,15 +61,20 @@ impl Struct {
                     .fields
                     .borrow()
                     .iter()
-                    .any(|field| field.name == f.name)
+                    .any(|field| field.name == f.name && f.name != tag::BASE)
             })
             .collect::<Vec<StructField>>();
 
         self.fields.borrow_mut().append(&mut fields);
 
-        self.fields
-            .borrow_mut()
-            .retain(|field| field.name.as_str() != tag::BASE);
+        self.fields.borrow_mut().retain(|field| {
+            if field.name.as_str() != tag::BASE {
+                true
+            } else {
+                self.basetypes.borrow_mut().push(field.type_name.clone());
+                false
+            }
+        });
 
         for subtype in &self.subtypes {
             if let RsEntity::Struct(s) = subtype {
