@@ -57,6 +57,12 @@ pub fn parse(text: &str) -> Result<RsFile, ()> {
             st.extend_attribute_group(&map);
         }
     }
+    for ty in &schema_rs.types {
+        if let RsEntity::Struct(st) = ty {
+            dbg!(&st.name);
+            dbg!(&st.basetypes);
+        }
+    }
 
     Ok(schema_rs)
 }

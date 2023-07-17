@@ -67,12 +67,9 @@ impl Struct {
 
         self.fields.borrow_mut().append(&mut fields);
 
-        self.fields.borrow_mut().retain(|field| {
-            if field.name.as_str() != tag::BASE {
-                true
-            } else {
+        self.fields.borrow().iter().for_each(|field| {
+            if field.name.as_str() == tag::BASE {
                 self.basetypes.borrow_mut().push(field.type_name.clone());
-                false
             }
         });
 

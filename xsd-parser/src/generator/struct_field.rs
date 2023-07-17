@@ -2,11 +2,12 @@ use crate::generator::default::{
     yaserde_for_attribute, yaserde_for_element, yaserde_for_flatten_element,
 };
 use crate::generator::Generator;
+use crate::parser::constants::tag;
 use crate::parser::types::{StructField, StructFieldSource, TypeModifier};
 
 pub trait StructFieldGenerator {
     fn generate(&self, entity: &StructField, gen: &Generator) -> String {
-        if entity.type_modifiers.contains(&TypeModifier::Empty) {
+        if entity.type_modifiers.contains(&TypeModifier::Empty) || entity.name == tag::BASE {
             return "".into();
         }
         format!(
