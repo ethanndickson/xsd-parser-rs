@@ -447,7 +447,7 @@ dependencies = [
 [[package]]
 name = "yaserde"
 version = "0.7.1"
-source = "git+https://github.com/ethanndickson/yaserde#251bea32f5e9d134f4c69b440b3e9b416d826dc5"
+source = "git+https://github.com/ethanndickson/yaserde#b9692555531679d3f4fa186530ca6315022159ab"
 dependencies = [
  "log",
  "xml-rs",
@@ -456,7 +456,7 @@ dependencies = [
 [[package]]
 name = "yaserde_derive"
 version = "0.7.1"
-source = "git+https://github.com/ethanndickson/yaserde#251bea32f5e9d134f4c69b440b3e9b416d826dc5"
+source = "git+https://github.com/ethanndickson/yaserde#b9692555531679d3f4fa186530ca6315022159ab"
 dependencies = [
  "heck",
  "log",
