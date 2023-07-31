@@ -93,9 +93,9 @@ pub fn serde(ast: &syn::DeriveInput) -> syn::Result<TokenStream> {
         }
 
         impl ::yaserde::YaDeserialize for #struct_name {
-            fn deserialize<R: ::std::io::Read>(
-                reader: &mut ::yaserde::de::Deserializer<R>,
-            ) -> ::std::result::Result<Self, ::std::string::String> {
+            fn deserialize(
+                reader: &mut ::yaserde::de::Deserializer<Box<dyn ::std::io::Read>>,
+            ) -> ::std::result::Result<Box<Self>, ::std::string::String> {
                 ::xsd_types::utils::yaserde::deserialize(reader, |s| {
                     #de_variants
                     Ok(#struct_name::__Unknown__(s.to_string()))

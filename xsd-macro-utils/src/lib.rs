@@ -27,9 +27,9 @@ pub fn default_serde(input: TokenStream) -> TokenStream {
                 #struct_name_literal
             }
 
-            fn serialize<W: ::std::io::Write>(
+            fn serialize(
                 &self,
-                writer: &mut ::yaserde::ser::Serializer<W>,
+                writer: &mut ::yaserde::ser::Serializer<Box<dyn ::yaserde::YaserdeWrite>>,
             ) -> ::std::result::Result<(), ::std::string::String> {
                 ::xsd_types::utils::yaserde::serialize(
                     self,
@@ -54,12 +54,12 @@ pub fn default_serde(input: TokenStream) -> TokenStream {
         }
 
         impl ::yaserde::YaDeserialize for #struct_name {
-            fn deserialize<R: ::std::io::Read>(
-                reader: &mut ::yaserde::de::Deserializer<R>,
-            ) -> ::std::result::Result<Self, ::std::string::String> {
+            fn deserialize(
+                reader: &mut ::yaserde::de::Deserializer<Box<dyn ::std::io::Read>>,
+            ) -> ::std::result::Result<Box<Self>, ::std::string::String> {
                 ::xsd_types::utils::yaserde::deserialize(
                     reader,
-                    |s| #struct_name::from_str(s).map_err(|e| e.to_string()),
+                    |s| #struct_name::from_str(s).map_err(|e| e.to_string()).map(|i| ::std::boxed::Box::new(i)),
                 )
             }
         }

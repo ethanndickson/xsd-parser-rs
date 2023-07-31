@@ -32,10 +32,10 @@ pub fn serialize<S, W: Write>(
     Ok(())
 }
 
-pub fn deserialize<S, R: Read>(
-    reader: &mut de::Deserializer<R>,
-    de_fn: impl FnOnce(&str) -> Result<S, String>,
-) -> Result<S, String> {
+pub fn deserialize<S>(
+    reader: &mut de::Deserializer<Box<dyn Read>>,
+    de_fn: impl FnOnce(&str) -> Result<Box<S>, String>,
+) -> Result<Box<S>, String> {
     if let Ok(xml::reader::XmlEvent::StartElement { .. }) = reader.peek() {
         reader.next_event()?;
     } else {
