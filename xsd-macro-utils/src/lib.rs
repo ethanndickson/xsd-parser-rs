@@ -23,6 +23,9 @@ pub fn default_serde(input: TokenStream) -> TokenStream {
 
     let serde = quote! {
         impl ::yaserde::YaSerialize for #struct_name {
+            fn name() -> &'static str {
+                #struct_name_literal
+            }
             fn serialize<W: ::std::io::Write>(
                 &self,
                 writer: &mut ::yaserde::ser::Serializer<W>,
