@@ -17,9 +17,7 @@ impl Default for FooType {
 }
 impl Validate for FooType {}
 
-
-#[derive(Default, PartialEq, Debug, UtilsTupleIo, UtilsDefaultSerde)]
+#[derive(Default, PartialEq, Debug, Clone, UtilsTupleIo, UtilsDefaultSerde)]
 pub struct FooType2(pub String);
 
 impl Validate for FooType2 {}
-

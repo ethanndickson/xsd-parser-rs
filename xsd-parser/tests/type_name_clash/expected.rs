@@ -1,4 +1,4 @@
-#[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
+#[derive(Default, PartialEq, Debug, Clone, YaSerialize, YaDeserialize)]
 #[yaserde(prefix = "tns", namespace = "tns: http://example.com")]
 pub struct BarType {
     #[yaserde(attribute, rename = "a")]
@@ -7,8 +7,7 @@ pub struct BarType {
 
 impl Validate for BarType {}
 
-
-#[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
+#[derive(Default, PartialEq, Debug, Clone, YaSerialize, YaDeserialize)]
 #[yaserde(prefix = "tns", namespace = "tns: http://example.com")]
 pub struct FooType {
     #[yaserde(prefix = "tns", rename = "Bar")]
@@ -20,7 +19,7 @@ impl Validate for FooType {}
 pub mod foo_type {
     use super::*;
 
-    #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
+    #[derive(Default, PartialEq, Debug, Clone, YaSerialize, YaDeserialize)]
     #[yaserde(prefix = "tns", namespace = "tns: http://example.com")]
     pub struct BarType {
         #[yaserde(attribute, rename = "b")]
@@ -28,7 +27,6 @@ pub mod foo_type {
 
         #[yaserde(attribute, rename = "a")]
         pub a: Option<String>,
-
     }
 
     impl Validate for BarType {}

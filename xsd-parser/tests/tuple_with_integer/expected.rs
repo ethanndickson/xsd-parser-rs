@@ -1,2 +1,2 @@
-#[derive(Default, PartialEq, Debug, UtilsTupleIo, UtilsDefaultSerde)]
-pub struct FooType (pub Integer);
+#[derive(Default, PartialEq, Debug, Clone, UtilsTupleIo, UtilsDefaultSerde)]
+pub struct FooType(pub Integer);

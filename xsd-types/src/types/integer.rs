@@ -79,7 +79,7 @@ mod tests {
         assert_eq!(Integer((-1).to_bigint().unwrap()).to_string(), "-1");
     }
 
-    #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
+    #[derive(Default, PartialEq, Debug, Clone, YaSerialize, YaDeserialize)]
     #[yaserde(prefix = "t", namespace = "t: test")]
     pub struct IntegerPair {
         #[yaserde(prefix = "t", rename = "First")]

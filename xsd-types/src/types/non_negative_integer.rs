@@ -87,7 +87,7 @@ mod tests {
         assert_eq!(NonNegativeInteger(0.to_biguint().unwrap()).to_string(), "0");
     }
 
-    #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
+    #[derive(Default, PartialEq, Debug, Clone, YaSerialize, YaDeserialize)]
     #[yaserde(prefix = "t", namespace = "t: test")]
     pub struct NonNegativeIntegerPair {
         #[yaserde(prefix = "t", rename = "First")]

@@ -97,7 +97,7 @@ mod tests {
         );
     }
 
-    #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
+    #[derive(Default, PartialEq, Debug, Clone, YaSerialize, YaDeserialize)]
     #[yaserde(prefix = "t", namespace = "t: test")]
     pub struct NonPositiveIntegerPair {
         #[yaserde(prefix = "t", rename = "First")]

@@ -37,7 +37,7 @@ mod tests {
     use num_bigint::ToBigInt;
     use yaserde_derive::{YaDeserialize, YaSerialize};
 
-    #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
+    #[derive(Default, PartialEq, Debug, Clone, YaSerialize, YaDeserialize)]
     #[yaserde(prefix = "t", namespace = "t: test")]
     pub struct DecimalPair {
         #[yaserde(prefix = "t", rename = "First")]
