@@ -84,24 +84,24 @@ pub trait StructGenerator {
             .into()
     }
 
-    fn macros(&self, _entity: &Struct, gen: &Generator) -> Cow<'static, str> {
-        let derives = "#[derive(Default, PartialEq, Debug, Clone, YaSerialize, YaDeserialize)]\n";
+    fn macros(&self, entity: &Struct, gen: &Generator) -> Cow<'static, str> {
+        let derives_rename = format!("#[derive(Default, PartialEq, Debug, Clone, YaSerialize, YaDeserialize)]\n#[yaserde(rename = \"{}\")]\n", entity.name);
         let tns = gen.target_ns.borrow();
         match tns.as_ref() {
             Some(tn) => match tn.name() {
                 Some(name) => format!(
                     "{derives}#[yaserde(prefix = \"{prefix}\", namespace = \"{prefix}: {uri}\")]\n",
-                    derives = derives,
+                    derives = derives_rename,
                     prefix = name,
                     uri = tn.uri()
                 ),
                 None => format!(
                     "{derives}#[yaserde(namespace = \"{uri}\")]\n",
-                    derives = derives,
+                    derives = derives_rename,
                     uri = tn.uri()
                 ),
             },
-            None => format!("{derives}#[yaserde()]\n", derives = derives),
+            None => format!("{derives}#[yaserde()]\n", derives = derives_rename),
         }
         .into()
     }
