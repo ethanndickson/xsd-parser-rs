@@ -85,7 +85,11 @@ pub trait StructGenerator {
     }
 
     fn macros(&self, entity: &Struct, gen: &Generator) -> Cow<'static, str> {
-        let derives_rename = format!("#[derive(Default, PartialEq, Debug, Clone, YaSerialize, YaDeserialize)]\n#[yaserde(rename = \"{}\")]\n", entity.name);
+        let mut traits = String::new();
+        entity.basetypes.borrow().iter().for_each(|t| {
+            traits.push_str(&format!("SE{t},"));
+        });
+        let derives_rename = format!("#[derive(Default, PartialEq, Debug, Clone, YaSerialize, YaDeserialize, {})]\n#[yaserde(rename = \"{}\")]\n", traits, entity.name);
         let tns = gen.target_ns.borrow();
         match tns.as_ref() {
             Some(tn) => match tn.name() {
@@ -116,13 +120,6 @@ pub trait StructGenerator {
 
     fn traits(&self, entity: &Struct, gen: &Generator) -> Cow<'static, str> {
         let mut traits = String::new();
-        entity.basetypes.borrow().iter().for_each(|t| {
-            traits.push_str(&format!(
-                r#"impl SE{t} for {} {{}}
-"#,
-                entity.name
-            ));
-        });
 
         // Empty validation
         traits.push_str(&gen_validate_impl(
