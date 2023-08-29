@@ -20,11 +20,10 @@ pub fn serde(ast: &syn::DeriveInput) -> syn::Result<TokenStream> {
 }
 
 fn from_str(ast: &syn::DeriveInput) -> syn::Result<TokenStream> {
+    let struct_name = &ast.ident;
     let convert = match extract_field_type(ast) {
         Type::String(_) => quote! { s.to_string() },
-        Type::Struct(ty) | Type::Simple(ty) => {
-            quote! { <#ty as ::std::str::FromStr>::from_str(s).map_err(|e| e.to_string())? }
-        }
+        Type::Struct(_) | Type::Simple(_) => extract_full_path(ast).unwrap(),
         Type::Vec(_, subtype) => match Type::from_path(subtype) {
             Type::String(subtype) | Type::Struct(subtype) | Type::Simple(subtype) => quote! {
                 s.split_whitespace()
@@ -122,6 +121,20 @@ fn extract_field_type(ast: &syn::DeriveInput) -> Type {
         }
         _ => unimplemented!("Implemented only for structs"),
     }
+}
+
+fn extract_full_path(ast: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
+    if let syn::Data::Struct(data_struct) = &ast.data {
+        if let syn::Fields::Unnamed(fields) = &data_struct.fields {
+            if let Some(syn::Type::Path(path)) = &fields.unnamed.first().map(|f| &f.ty) {
+                return Ok(
+                    quote! { <#path as ::std::str::FromStr>::from_str(s).map_err(|e| e.to_string())? },
+                );
+            }
+        }
+    }
+
+    Err(syn::Error::new_spanned(ast, "Unable to extract full path"))
 }
 
 fn extract_field_path(data_struct: &syn::DataStruct) -> Option<&syn::Path> {
